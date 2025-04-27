@@ -8,13 +8,20 @@ const popupEdit = document.querySelector('.popup_type_edit');
 const popupAddCard = document.querySelector('.popup_type_new-card');
 const popupTypeImage = document.querySelector('.popup_type_image');
 const popupImage = document.querySelector('.popup_image');
-const popupCaption = document.querySelector('.popup_caption');
+const popupCaption = document.querySelector('.popup__caption');
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 const addForm = document.querySelector('.popup_type_new-card .popup__form');
 
+function handlePopupImage(cardData) {
+    popupImage.src = cardData.link;
+    popupImage.alt = cardData.name;
+    popupCaption.textContent = cardData.name;
+    openModal(popupTypeImage);
+}
+
 initialCards.forEach((cardData) => { 
-    const cardElement = createCard(cardData, deleteCard, handleCardClick); 
+    const cardElement = createCard(cardData, deleteCard, handlePopupImage); 
     cardsContainer.append(cardElement);
 })
 
@@ -23,8 +30,3 @@ addButton.addEventListener('click', () => {
   addForm.reset();
   openModal(popupAddCard);
 });
-
-function handleAddCard() {
-    elements.addForm.reset();
-    openModal(elements.PopupAddCard);
-}
