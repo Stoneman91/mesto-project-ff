@@ -1,6 +1,6 @@
 import '../pages/index.css';
 import { initialCards } from './cards.js';
-import { createCard, deleteCard } from "../components/card.js";
+import { createCard, deleteCard, handleLikeClick } from "../components/card.js";
 import { closeModal, openModal } from "../components/modal.js";
 
 const cardsContainer = document.querySelector('.places__list'); 
@@ -11,6 +11,8 @@ const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
+const profileName = document.querySelector('.profile__title');
+const profileJob = document.querySelector('.profile__description');
 const formElement = document.querySelector('.popup_type_edit');
 const nameInput = formElement.querySelector('.popup__input_type_name');
 const jobInput = formElement.querySelector('.popup__input_type_description');
@@ -26,7 +28,7 @@ function handlePopupImage(cardData) {
 }
 
 initialCards.forEach((cardData) => { 
-    const cardElement = createCard(cardData, deleteCard, handlePopupImage); 
+    const cardElement = createCard(cardData, deleteCard, handlePopupImage, handleLikeClick); 
     cardsContainer.append(cardElement);
 })
 
@@ -55,7 +57,7 @@ function handleAddCardSubmit(evt) {
         name: cardNameInput.value,
         link: cardLinkInput.value
     };
-    const newCard = createCard(newCardData, deleteCard, handlePopupImage);
+    const newCard = createCard(newCardData, deleteCard, handlePopupImage, handleLikeClick);
     cardsContainer.prepend(newCard);
     addCardForm.reset();
     closeModal(popupAddCard);
