@@ -11,7 +11,12 @@ const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
-const addForm = document.querySelector('.popup_type_new-card .popup__form');
+const formElement = document.querySelector('.popup_type_edit');
+const nameInput = formElement.querySelector('.popup__input_type_name');
+const jobInput = formElement.querySelector('.popup__input_type_description');
+const addCardForm = document.querySelector('.popup_type_new-card .popup__form');
+const cardNameInput = addCardForm.querySelector('.popup__input_type_card-name');
+const cardLinkInput = addCardForm.querySelector('.popup__input_type_url');
 
 function handlePopupImage(cardData) {
     popupImage.src = cardData.link;
@@ -25,33 +30,35 @@ initialCards.forEach((cardData) => {
     cardsContainer.append(cardElement);
 })
 
-editButton.addEventListener('click', () => openModal(popupEdit));
-addButton.addEventListener('click', () => {
-  addForm.reset();
-  openModal(popupAddCard);
-});
-
-
-// Находим форму в DOM
-const formElement = // Воспользуйтесь методом querySelector()
-// Находим поля формы в DOM
-const nameInput = // Воспользуйтесь инструментом .querySelector()
-const jobInput = // Воспользуйтесь инструментом .querySelector()
-
-// Обработчик «отправки» формы, хотя пока
-// она никуда отправляться не будет
-function handleFormSubmit(evt) {
-    evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-                                                // Так мы можем определить свою логику отправки.
-                                                // О том, как это делать, расскажем позже.
-
-    // Получите значение полей jobInput и nameInput из свойства value
-
-    // Выберите элементы, куда должны быть вставлены значения полей
-
-    // Вставьте новые значения с помощью textContent
+function handleAddCard() {
+    addCardForm.reset();
+    openModal(popupAddCard);
 }
 
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
+editButton.addEventListener('click', () => openModal(popupEdit));
+addButton.addEventListener('click', () => handleAddCard());
+
+
+
+function handleFormSubmit(evt) {
+    evt.preventDefault();
+    profileName.textContent = nameInput.value;
+    profileJob.textContent = jobInput.value;
+    closeModal(popupEdit);
+}
 formElement.addEventListener('submit', handleFormSubmit); 
+
+function handleAddCardSubmit(evt) {
+    evt.preventDefault();
+    
+    const newCardData = {
+        name: cardNameInput.value,
+        link: cardLinkInput.value
+    };
+    const newCard = createCard(newCardData, deleteCard, handlePopupImage);
+    cardsContainer.prepend(newCard);
+    addCardForm.reset();
+    closeModal(popupAddCard);
+}
+addCardForm.addEventListener('submit', handleAddCardSubmit);
+
