@@ -19,10 +19,18 @@ const jobInput = profileEditForm.querySelector('.popup__input_type_description')
 const addCardForm = document.querySelector('.popup_type_new-card .popup__form');
 const cardNameInput = addCardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = addCardForm.querySelector('.popup__input_type_url');
+const validConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__input-error_active'
+  }; 
 
 function handlePopupImage(cardData) {
     popupImage.src = cardData.link;
-    popupImage.alt = cardData.name;
+    popupImage.alt = cardData.name; 
     popupCaption.textContent = cardData.name;
     openModal(popupTypeImage);
 }
