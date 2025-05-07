@@ -2,6 +2,7 @@ import '../pages/index.css';
 import { initialCards } from './cards.js';
 import { createCard, deleteCard, handleLikeClick } from "../components/card.js";
 import { closeModal, openModal } from "../components/modal.js";
+import { enableValidation, clearValidation } from ".validation.js";
 
 const cardsContainer = document.querySelector('.places__list'); 
 const popupEdit = document.querySelector('.popup_type_edit');
@@ -19,7 +20,7 @@ const jobInput = profileEditForm.querySelector('.popup__input_type_description')
 const addCardForm = document.querySelector('.popup_type_new-card .popup__form');
 const cardNameInput = addCardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = addCardForm.querySelector('.popup__input_type_url');
-const validConfig = {
+const validationConfig = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__button',
@@ -27,6 +28,8 @@ const validConfig = {
     inputErrorClass: 'popup__input_type_error',
     errorClass: 'popup__input-error_active'
   }; 
+
+enableValidation(validationConfig);
 
 function handlePopupImage(cardData) {
     popupImage.src = cardData.link;
@@ -47,6 +50,7 @@ function handleAddCard() {
 function fillProfileForm() {
     nameInput.value = profileName.textContent;
     jobInput.value = profileJob.textContent;
+    clearValidation(profileEditForm, validationConfig);
 }
 
 editButton.addEventListener('click', () => {
@@ -77,5 +81,10 @@ function handleAddCardSubmit(evt) {
     addCardForm.reset();
     closeModal(popupAddCard);
 }
+
+function resetAddCardForm() {
+    addCardForm.reset();
+    clearValidation(addCardForm, validationConfig);
 addCardForm.addEventListener('submit', handleAddCardSubmit);
+}
 
