@@ -2,7 +2,7 @@ import '../pages/index.css';
 import { initialCards } from './cards.js';
 import { createCard, deleteCard, handleLikeClick } from "../components/card.js";
 import { closeModal, openModal } from "../components/modal.js";
-import { enableValidation, clearValidation } from ".validation.js";
+import { enableValidation, clearValidation } from "../components/validation.js";
 
 const cardsContainer = document.querySelector('.places__list'); 
 const popupEdit = document.querySelector('.popup_type_edit');
@@ -20,6 +20,7 @@ const jobInput = profileEditForm.querySelector('.popup__input_type_description')
 const addCardForm = document.querySelector('.popup_type_new-card .popup__form');
 const cardNameInput = addCardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = addCardForm.querySelector('.popup__input_type_url');
+
 const validationConfig = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
@@ -28,8 +29,7 @@ const validationConfig = {
     inputErrorClass: 'popup__input_type_error',
     errorClass: 'popup__input-error_active'
   }; 
-
-enableValidation(validationConfig);
+  
 
 function handlePopupImage(cardData) {
     popupImage.src = cardData.link;
@@ -50,12 +50,11 @@ function handleAddCard() {
 function fillProfileForm() {
     nameInput.value = profileName.textContent;
     jobInput.value = profileJob.textContent;
-    clearValidation(profileEditForm, validationConfig);
+    openModal(popupEdit);
 }
 
 editButton.addEventListener('click', () => {
     fillProfileForm();
-    openModal(popupEdit);
 });
 addButton.addEventListener('click', () => handleAddCard());
 
@@ -82,9 +81,6 @@ function handleAddCardSubmit(evt) {
     closeModal(popupAddCard);
 }
 
-function resetAddCardForm() {
-    addCardForm.reset();
-    clearValidation(addCardForm, validationConfig);
 addCardForm.addEventListener('submit', handleAddCardSubmit);
-}
+
 
