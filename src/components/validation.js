@@ -26,7 +26,7 @@ export function enableValidation(settings) {
     errorMessage = input.dataset.error;
   } 
   else if (input.type === 'url' && input.validity.typeMismatch) {
-    errorMessage = 'Введите URL в формате: http://example.com';
+    errorMessage = 'Введите URL в формате: http://example.ru';
   }
   else if (!input.validity.valid) {
     errorMessage = input.validationMessage;
@@ -63,8 +63,11 @@ export function enableValidation(settings) {
     const submitButton = form.querySelector(config.submitButtonSelector);
   
     inputs.forEach(input => {
+      input.value = form.dataset.initialValue || '';
       hideInputError(form, input, config);
     });
+    submitButton.disabled = true;
+    submitButton.classList.add(config.inactiveButtonClass);
   
     toggleButtonState(form, inputs, submitButton, config);
   }

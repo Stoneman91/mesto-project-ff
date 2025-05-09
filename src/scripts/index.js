@@ -29,7 +29,8 @@ const validationConfig = {
     inputErrorClass: 'popup__input_type_error',
     errorClass: 'popup__input-error_active'
   }; 
-  
+
+enableValidation(validationConfig);
 
 function handlePopupImage(cardData) {
     popupImage.src = cardData.link;
@@ -45,14 +46,21 @@ initialCards.forEach((cardData) => {
 
 function handleAddCard() {
     addCardForm.reset();
+    clearValidation(addCardForm, validationConfig);
     openModal(popupAddCard);
 }
 function fillProfileForm() {
     nameInput.value = profileName.textContent;
     jobInput.value = profileJob.textContent;
-    openModal(popupEdit);
-}
-
+    clearValidation(profileEditForm, validationConfig);
+    Array.from(profileEditForm.elements).forEach(input => {
+        if (input.tagName === 'INPUT') {
+          checkInputValidity(profileEditForm, input, validationConfig);
+        }
+      });
+      openModal(popupEdit);
+    }
+    
 editButton.addEventListener('click', () => {
     fillProfileForm();
 });
@@ -62,10 +70,13 @@ addButton.addEventListener('click', () => handleAddCard());
 
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
-    profileName.textContent = nameInput.value;
-    profileJob.textContent = jobInput.value;
-    closeModal(popupEdit);
-}
+    if (profileEditForm.checkValidity()) { 
+        profileName.textContent = nameInput.value;
+        profileJob.textContent = jobInput.value;
+        closeModal(popupEdit);
+      }
+    }
+
 profileEditForm.addEventListener('submit', handleProfileFormSubmit); 
 
 function handleAddCardSubmit(evt) {
