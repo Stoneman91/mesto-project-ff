@@ -36,7 +36,7 @@ function handlePopupImage(cardData) {
     popupImage.src = cardData.link;
     popupImage.alt = cardData.name; 
     popupCaption.textContent = cardData.name;
-    clearValidation();
+    clearValidation(addCardForm,validationConfig);
     openModal(popupTypeImage);
 }
 
@@ -58,15 +58,15 @@ function fillProfileForm() {
     nameInput.value = profileName.textContent;
     jobInput.value = profileJob.textContent;
     setTimeout(() => {
-        checkInputValidity(profileEditForm, nameInput );
-        checkInputValidity(profileEditForm, jobInput );
+        checkInputValidity(profileEditForm, nameInput, validationConfig);
+        checkInputValidity(profileEditForm, jobInput, validationConfig);
         toggleButtonState(
           [nameInput, jobInput],
           profileEditForm.querySelector(validationConfig.submitButtonSelector),
           validationConfig
         );
       }, 0);
-      clearValidation();
+      clearValidation(profileEditForm, validationConfig);
       openModal(popupEdit);
     }
     
@@ -78,9 +78,6 @@ addButton.addEventListener('click', () => {
     handleAddCard();
   });
   
-
-
-
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
     if (profileEditForm.checkValidity()) { 
