@@ -21,10 +21,22 @@ const addCardForm = document.querySelector('.popup_type_new-card .popup__form');
 const cardNameInput = addCardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = addCardForm.querySelector('.popup__input_type_url');
 
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+}
+
+enableValidation(validationConfig);
+
 function handlePopupImage(cardData) {
     popupImage.src = cardData.link;
     popupImage.alt = cardData.name; 
     popupCaption.textContent = cardData.name;
+    clearValidation();
     openModal(popupTypeImage);
 }
 
@@ -39,7 +51,7 @@ function handleAddCard() {
         return;
       }
     addCardForm.reset();
-    
+    clearValidation(addCardForm, validationConfig);
     openModal(popupAddCard);
 }
 function fillProfileForm() {
@@ -49,12 +61,12 @@ function fillProfileForm() {
         checkInputValidity(profileEditForm, nameInput );
         checkInputValidity(profileEditForm, jobInput );
         toggleButtonState(
-          profileEditForm,
           [nameInput, jobInput],
           profileEditForm.querySelector(validationConfig.submitButtonSelector),
+          validationConfig
         );
       }, 0);
-      
+      clearValidation();
       openModal(popupEdit);
     }
     

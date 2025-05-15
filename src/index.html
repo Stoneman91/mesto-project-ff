@@ -62,7 +62,7 @@
     pattern="^[a-zA-Zа-яА-ЯёЁ\s-]+$" 
     data-error="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
   >
-  <span class="popup__error card-name-error"></span>
+  <span class="popup__error card-name-error" id="card-name-error"></span>
   
   <input 
     type="url" 
@@ -72,7 +72,7 @@
     placeholder="Ссылка на картинку" 
     required
   >
-  <span class="popup__error card-link-error"></span>
+  <span class="popup__error card-link-error" id="card-link-error"></span>
   
   <button type="submit" class="button popup__button popup__button_disabled">Сохранить</button>
       </form>
