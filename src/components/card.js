@@ -6,8 +6,8 @@ export function createCard(cardData, removeCard, handleImageClick, handleLikeCli
     const deleteButton = cardElement.querySelector('.card__delete-button');  
     const likeButton = cardElement.querySelector('.card__like-button');
     
-    cardImage.src = cardData.link; 
-    cardImage.alt = cardData.name; 
+    cardImage.src = cardData.link;
+    cardImage.alt = cardData.name;
     cardTitle.textContent = cardData.name;
  
     cardImage.addEventListener('click', () => handleImageClick(cardData));

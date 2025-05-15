@@ -2,7 +2,7 @@ import '../pages/index.css';
 import { initialCards } from './cards.js';
 import { createCard, deleteCard, handleLikeClick } from "../components/card.js";
 import { closeModal, openModal } from "../components/modal.js";
-import { enableValidation, clearValidation } from "../components/validation.js";
+import { enableValidation, clearValidation, checkInputValidity, toggleButtonState} from "../components/validation.js";
 
 const cardsContainer = document.querySelector('.places__list'); 
 const popupEdit = document.querySelector('.popup_type_edit');
@@ -21,17 +21,6 @@ const addCardForm = document.querySelector('.popup_type_new-card .popup__form');
 const cardNameInput = addCardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = addCardForm.querySelector('.popup__input_type_url');
 
-const validationConfig = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__input-error_active'
-  }; 
-
-enableValidation(validationConfig);
-
 function handlePopupImage(cardData) {
     popupImage.src = cardData.link;
     popupImage.alt = cardData.name; 
@@ -45,26 +34,38 @@ initialCards.forEach((cardData) => {
 })
 
 function handleAddCard() {
+    if (!popupAddCard) {
+        console.error('Попап добавления карточки не найден!');
+        return;
+      }
     addCardForm.reset();
-    clearValidation(addCardForm, validationConfig);
+    
     openModal(popupAddCard);
 }
 function fillProfileForm() {
     nameInput.value = profileName.textContent;
     jobInput.value = profileJob.textContent;
-    clearValidation(profileEditForm, validationConfig);
-    Array.from(profileEditForm.elements).forEach(input => {
-        if (input.tagName === 'INPUT') {
-          checkInputValidity(profileEditForm, input, validationConfig);
-        }
-      });
+    setTimeout(() => {
+        checkInputValidity(profileEditForm, nameInput );
+        checkInputValidity(profileEditForm, jobInput );
+        toggleButtonState(
+          profileEditForm,
+          [nameInput, jobInput],
+          profileEditForm.querySelector(validationConfig.submitButtonSelector),
+        );
+      }, 0);
+      
       openModal(popupEdit);
     }
     
 editButton.addEventListener('click', () => {
     fillProfileForm();
 });
-addButton.addEventListener('click', () => handleAddCard());
+addButton.addEventListener('click', () => {
+    console.log('Кнопка "+" нажата!'); // Для отладки
+    handleAddCard();
+  });
+  
 
 
 
