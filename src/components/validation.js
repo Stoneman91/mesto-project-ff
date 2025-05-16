@@ -1,5 +1,6 @@
 const showInputError = (formElement, inputElement, errorMessage, config) => {
   const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
+   if (!errorElement) return;
   inputElement.classList.add(config.inputErrorClass);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(config.errorClass);
@@ -14,7 +15,10 @@ const hideInputError = (formElement, inputElement, config) => {
 
 export const checkInputValidity = (formElement, inputElement, config) => {
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, config);
+    const errorMessage = inputElement.dataset.error || 
+                         inputElement.dataset.errorMessage || 
+                         inputElement.validationMessage;
+    showInputError(formElement, inputElement, errorMessage, config);
   } else {
     hideInputError(formElement, inputElement, config);
   }

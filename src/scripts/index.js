@@ -46,10 +46,6 @@ initialCards.forEach((cardData) => {
 })
 
 function handleAddCard() {
-    if (!popupAddCard) {
-        console.error('Попап добавления карточки не найден!');
-        return;
-      }
     addCardForm.reset();
     clearValidation(addCardForm, validationConfig);
     openModal(popupAddCard);
@@ -74,7 +70,6 @@ editButton.addEventListener('click', () => {
     fillProfileForm();
 });
 addButton.addEventListener('click', () => {
-    console.log('Кнопка "+" нажата!'); // Для отладки
     handleAddCard();
   });
   
@@ -91,7 +86,6 @@ profileEditForm.addEventListener('submit', handleProfileFormSubmit);
 
 function handleAddCardSubmit(evt) {
     evt.preventDefault();
-    
     const newCardData = {
         name: cardNameInput.value,
         link: cardLinkInput.value
