@@ -3,6 +3,7 @@ import { initialCards } from './cards.js';
 import { createCard, deleteCard, handleLikeClick } from "../components/card.js";
 import { closeModal, openModal } from "../components/modal.js";
 import { enableValidation, clearValidation, checkInputValidity, toggleButtonState} from "../components/validation.js";
+import { userInfo, getCards } from '../components/api.js';
 
 const cardsContainer = document.querySelector('.places__list'); 
 const popupEdit = document.querySelector('.popup_type_edit');
@@ -29,6 +30,10 @@ const validationConfig = {
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__error_visible'
 }
+
+userInfo();
+getCards();
+
 
 enableValidation(validationConfig);
 
