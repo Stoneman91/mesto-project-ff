@@ -1,7 +1,7 @@
 const cardTemplate = document.querySelector("#card-template").content;
 export function createCard(
   cardData,
-  removeCard,
+  onDeleteClick,
   handleImageClick,
   handleLikeClick,
   currentUserId
@@ -23,14 +23,14 @@ export function createCard(
 
   if (cardData.owner._id === currentUserId) {
     deleteButton.addEventListener("click", () =>
-      removeCard(cardElement, cardData._id)
+      onDeleteClick(cardElement, cardData._id) // вызывает попап подтверждения
     );
   } else {
     deleteButton.remove();
   }
 
   likeButton.addEventListener("click", () => {
-    handleLikeClick(cardData._id, likeButton, likeCountElement);
+    handleLikeClick(cardData._id, likeButton, likeCountElement,currentUserId);
   });
 
   return cardElement;
@@ -66,8 +66,4 @@ function updateLikesState(likes, likeButton, likeCountElement, currentUserId) {
   } else {
     likeButton.classList.remove("card__like-button_is-active");
   }
-}
-
-export function deleteCard(cardElement) {
-  cardElement.remove();
 }

@@ -45,3 +45,10 @@ export function addNewCard(name, link) {
     }),
   }).then(checkResponse);
 }
+
+export function deleteCardFromServer(cardId) {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-42/cards/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
+  }).then(checkResponse);
+}
