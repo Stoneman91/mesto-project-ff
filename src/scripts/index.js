@@ -8,6 +8,8 @@ import {
   editProfile,
   addNewCard,
   deleteCardFromServer,
+  likeCard,
+  unlikeCard
 } from "../components/api.js";
 
 let currentUserId = null;
@@ -72,7 +74,7 @@ function renderCards(cards) {
       cardData,
       (element, id) => handleDeleteClick(element, id),
       handlePopupImage,
-      (cardId, element) => handleLikeClick(cardId, element, currentUserId),
+      (cardId, element) => handleLikeClick(cardId, element, currentUserId, likeCard, unlikeCard),
       currentUserId
     );
     cardsContainer.append(cardElement);
