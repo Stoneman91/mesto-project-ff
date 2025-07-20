@@ -13,11 +13,11 @@ const popupCaption = document.querySelector(".popup__caption");
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
 const profileName = document.querySelector(".profile__title");
-const profileJob = document.querySelector(".profile__description");
 const profileImage = document.querySelector('.profile__image');
 const profileEditForm = popupEdit.querySelector(".popup__form");
 const nameInput = profileEditForm.querySelector(".popup__input_type_name");
 const jobInput = profileEditForm.querySelector(".popup__input_type_description");
+const profileDescription = document.querySelector('.profile__description');
 const addCardForm = document.querySelector(".popup_type_new-card .popup__form");
 const cardNameInput = addCardForm.querySelector(".popup__input_type_card-name");
 const cardLinkInput = addCardForm.querySelector(".popup__input_type_url");
@@ -31,21 +31,14 @@ const validationConfig = {
   errorClass: "popup__error_visible",
 };
 
-// Включение валидации форм
 enableValidation(validationConfig);
 
-// Загрузка данных пользователя и карточек при старте
 Promise.all([getUserInfo(), getCards()])
   .then(([userData, cards]) => {
-    // Обновляем данные профиля
     profileName.textContent = userData.name;
-    profileJob.textContent = userData.about;
+    profileDescription.textContent = userData.about;
     profileImage.style.backgroundImage = `url(${userData.avatar})`;
-    
-    // Сохраняем ID пользователя
     window.currentUserId = userData._id;
-    
-    // Рендерим карточки
     renderCards(cards);
   })
   .catch(err => {
@@ -81,7 +74,7 @@ function handleAddCard() {
 
 function fillProfileForm() {
   nameInput.value = profileName.textContent;
-  jobInput.value = profileJob.textContent;
+  jobInput.value = profileDescription.textContent;
   clearValidation(profileEditForm, validationConfig);
   openModal(popupEdit);
 }
@@ -90,38 +83,28 @@ editButton.addEventListener("click", fillProfileForm);
 addButton.addEventListener("click", handleAddCard);
 
 // Новый обработчик отправки формы профиля
-function handleProfileFormSubmit(evt) {
+profileEditForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   
-  const saveButton = profileEditForm.querySelector('.popup__button');
-  const initialText = saveButton.textContent;
+  const submitButton = profileEditForm.querySelector('.popup__button');
+  const initialText = submitButton.textContent;
+  submitButton.textContent = 'Сохранение...';
   
-  // Меняем текст кнопки на время сохранения
-  //saveButton.textContent = 'Сохранение...';
-  
-  // Отправляем данные на сервер
-  editProfile({
-    name: nameInput.value,
-    about: jobInput.value
-  })
-  .then((updatedData) => {
-    // Обновленные данные на странице
-    profileName.textContent = updatedData.name;
-    profileJob.textContent = updatedData.about;
-    
-    // Закрытие
-    closeModal(popupEdit);
-  })
-  .catch(err => {
-    console.error('Ошибка при обновлении профиля:', err);
-  })
-  .finally(() => {
-    //исходный текст кнопки
-    saveButton.textContent = initialText;
-  });
-}
+  editProfile(nameInput.value, jobInput.value)
+    .then(userData => {
+      profileName.textContent = userData.name;
+      profileDescription.textContent = userData.about;
+      closeModal(document.querySelector('.popup_type_edit'));
+    })
+    .catch(err => {
+      console.error('Ошибка при обновлении профиля:', err);
+    })
+    .finally(() => {
+      submitButton.textContent = initialText;
+    });
+});
 
-profileEditForm.addEventListener("submit", handleProfileFormSubmit);
+profileEditForm.addEventListener("submit", editProfile);
 
 function handleAddCardSubmit(evt) {
   evt.preventDefault();

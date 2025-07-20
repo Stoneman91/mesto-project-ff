@@ -76,7 +76,6 @@ export const clearValidation = (formElement, config) => {
       errorElement.classList.remove(config.errorClass);
     }
   });
-
   buttonElement.disabled = true;
   buttonElement.classList.add(config.inactiveButtonClass);
 };
