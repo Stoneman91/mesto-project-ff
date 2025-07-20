@@ -32,9 +32,9 @@ export function editProfile() {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      name: name,
-      about: about,
-    }),
+      name: data.name,
+      about: data.about
+    })
   }).then((res) => {
     if (!res.ok) {
       throw new Error(`Ошибка: ${res.status}`);
