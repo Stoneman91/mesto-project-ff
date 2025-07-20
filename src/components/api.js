@@ -1,7 +1,7 @@
 export function getuserInfo(name, about, avatar, _id) {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-39/users/me", {
+  return fetch("https://nomoreparties.co/v1/wff-cohort-42/users/me", {
     headers: {
-      authorization: "25ebb938-e518-422d-a33a-522667db90ac",
+      authorization: "981a0154-194c-4782-aa17-96b010eb9cce",
     },
   }).then((res) => {
     if (!res.ok) {
@@ -12,9 +12,9 @@ export function getuserInfo(name, about, avatar, _id) {
 }
 
 export function getCards() {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-39/cards", {
+  return fetch("https://nomoreparties.co/v1/wff-cohort-42/cards", {
     headers: {
-      authorization: "25ebb938-e518-422d-a33a-522667db90ac",
+      authorization: "981a0154-194c-4782-aa17-96b010eb9cce",
     },
   }).then((res) => {
     if (!res.ok) {
@@ -25,10 +25,10 @@ export function getCards() {
 }
 
 export function editProfile() {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-39/users/me", {
+  return fetch("https://nomoreparties.co/v1/wff-cohort-42/users/me", {
     method: "PATCH",
     headers: {
-      authorization: "25ebb938-e518-422d-a33a-522667db90ac",
+      authorization: "981a0154-194c-4782-aa17-96b010eb9cce",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
