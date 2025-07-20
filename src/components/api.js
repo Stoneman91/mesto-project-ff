@@ -1,5 +1,5 @@
 export function getuserInfo(name, about, avatar, _id) {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-42/users/me", {
+  return fetch("https://nomoreparties.co/v1/cohort-42/users/me", {
     headers: {
       authorization: "981a0154-194c-4782-aa17-96b010eb9cce",
     },
@@ -12,7 +12,7 @@ export function getuserInfo(name, about, avatar, _id) {
 }
 
 export function getCards() {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-42/cards", {
+  return fetch("https://nomoreparties.co/v1/cohort-42/cards", {
     headers: {
       authorization: "981a0154-194c-4782-aa17-96b010eb9cce",
     },
@@ -25,7 +25,7 @@ export function getCards() {
 }
 
 export function editProfile() {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-42/users/me", {
+  return fetch("https://nomoreparties.co/v1/cohort-42/users/me", {
     method: "PATCH",
     headers: {
       authorization: "981a0154-194c-4782-aa17-96b010eb9cce",
