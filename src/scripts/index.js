@@ -2,7 +2,7 @@ import "../pages/index.css";
 import { createCard, deleteCard, handleLikeClick } from "../components/card.js";
 import { closeModal, openModal } from "../components/modal.js";
 import { enableValidation, clearValidation } from "../components/validation.js";
-import { getUserInfo, getCards, editProfile } from "../components/api.js";
+import { getUserInfo, getCards, editProfile,addNewCard } from "../components/api.js";
 
 const cardsContainer = document.querySelector(".places__list");
 const popupEdit = document.querySelector(".popup_type_edit");
@@ -108,19 +108,36 @@ profileEditForm.addEventListener("submit", editProfile);
 
 function handleAddCardSubmit(evt) {
   evt.preventDefault();
-  const newCardData = {
-    name: cardNameInput.value,
-    link: cardLinkInput.value,
-  };
-  const newCard = createCard(
-    newCardData,
-    deleteCard,
-    handlePopupImage,
-    handleLikeClick
-  );
-  cardsContainer.prepend(newCard);
-  addCardForm.reset();
-  closeModal(popupAddCard);
+  
+  const submitButton = addCardForm.querySelector(".popup__button");
+  const initialText = submitButton.textContent;
+  submitButton.textContent = "Сохранение...";
+
+  addNewCard(cardNameInput.value, cardLinkInput.value)
+    .then((newCard) => {
+      const cardElement = createCard(
+        newCard,
+        (cardElement, cardId) => {
+          // Функция удаления карточки
+          deleteCard(cardElement, cardId);
+        },
+        handlePopupImage,
+        handleLikeClick
+      );
+      
+      // Добавляем новую карточку в начало списка
+      cardsContainer.append(cardElement);
+      
+      // Закрываем попап и сбрасываем форму
+      closeModal(popupAddCard);
+      addCardForm.reset();
+    })
+    .catch((err) => {
+      console.error("Ошибка при добавлении карточки:", err);
+    })
+    .finally(() => {
+      submitButton.textContent = initialText;
+    });
 }
 
 addCardForm.addEventListener("submit", handleAddCardSubmit);
