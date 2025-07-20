@@ -4,6 +4,8 @@ import { closeModal, openModal } from "../components/modal.js";
 import { enableValidation, clearValidation } from "../components/validation.js";
 import { getUserInfo, getCards, editProfile,addNewCard } from "../components/api.js";
 
+let currentUserId = null;
+
 const cardsContainer = document.querySelector(".places__list");
 const popupEdit = document.querySelector(".popup_type_edit");
 const popupAddCard = document.querySelector(".popup_type_new-card");
@@ -35,11 +37,11 @@ enableValidation(validationConfig);
 
 Promise.all([getUserInfo(), getCards()])
   .then(([userData, cards]) => {
+    currentUserId = userData._id;
     profileName.textContent = userData.name;
     profileDescription.textContent = userData.about;
     profileImage.style.backgroundImage = `url(${userData.avatar})`;
-    window.currentUserId = userData._id;
-    renderCards(cards);
+    renderCards(cards, currentUserId);
   })
   .catch(err => {
     console.error('Ошибка при загрузке данных:', err);
@@ -59,8 +61,9 @@ function renderCards(cards) {
     const cardElement = createCard(
       cardData,
       deleteCard,
-      handlePopupImage,
-      handleLikeClick
+      handlePopupImage, 
+     (cardId, element) => handleLikeClick(cardId, element, currentUserId),
+      currentUserId 
     );
     cardsContainer.append(cardElement);
   });
@@ -121,8 +124,8 @@ function handleAddCardSubmit(evt) {
           // Функция удаления карточки
           deleteCard(cardElement, cardId);
         },
-        handlePopupImage,
-        handleLikeClick
+      (cardId, element) => handleLikeClick(cardId, element, currentUserId),
+        currentUserId
       );
       
       // Добавляем новую карточку в начало списка
@@ -139,5 +142,7 @@ function handleAddCardSubmit(evt) {
       submitButton.textContent = initialText;
     });
 }
+
+
 
 addCardForm.addEventListener("submit", handleAddCardSubmit);
