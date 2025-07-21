@@ -9,7 +9,8 @@ import {
   addNewCard,
   deleteCardFromServer,
   likeCard,
-  unlikeCard
+  unlikeCard,
+  editAvatar
 } from "../components/api.js";
 
 let currentUserId = null;
@@ -35,6 +36,10 @@ const profileDescription = document.querySelector(".profile__description");
 const addCardForm = document.querySelector(".popup_type_new-card .popup__form");
 const cardNameInput = addCardForm.querySelector(".popup__input_type_card-name");
 const cardLinkInput = addCardForm.querySelector(".popup__input_type_url");
+
+const popupEditAvatar = document.querySelector('.popup_type_edit-avatar');
+const editAvatarForm = popupEditAvatar.querySelector('.popup__form');
+const avatarLinkInput = editAvatarForm.querySelector('.popup__input_type_avatar-url');
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -74,7 +79,8 @@ function renderCards(cards) {
       cardData,
       (element, id) => handleDeleteClick(element, id),
       handlePopupImage,
-      (cardId, element) => handleLikeClick(cardId, element, currentUserId, likeCard, unlikeCard),
+      (cardId, element) =>
+        handleLikeClick(cardId, element, currentUserId, likeCard, unlikeCard),
       currentUserId
     );
     cardsContainer.append(cardElement);
@@ -188,7 +194,33 @@ confirmForm.addEventListener("submit", handleConfirmSubmit);
 function handleDeleteClick(cardElement, cardId) {
   cardToDelete = {
     element: cardElement,
-    id: cardId
+    id: cardId,
   };
   openModal(popupConfirm);
 }
+
+profileImage.addEventListener('click', () => {
+  editAvatarForm.reset();
+  clearValidation(editAvatarForm, validationConfig);
+  openModal(popupEditAvatar);
+});
+
+editAvatarForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  const submitButton = editAvatarForm.querySelector('.popup__button');
+  const initialText = submitButton.textContent;
+  submitButton.textContent = 'Сохранение...';
+
+  editAvatar(avatarLinkInput.value)
+    .then((userData) => {
+      profileImage.style.backgroundImage = `url(${userData.avatar})`;
+      closeModal(popupEditAvatar);
+    })
+    .catch((err) => {
+      console.error('Ошибка при обновлении аватара:', err);
+    })
+    .finally(() => {
+      submitButton.textContent = initialText;
+    });
+});

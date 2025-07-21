@@ -36,3 +36,7 @@
   color: #ff0000;
   visibility: visible;
 }
+
+.avatar-link-error {
+   border-bottom: 1px solid #ff0000;
+}

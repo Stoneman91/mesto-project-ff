@@ -54,15 +54,31 @@ export function deleteCardFromServer(cardId) {
 }
 
 export const likeCard = (cardId) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-42/cards/likes/${cardId}`, {
-    method: 'PUT',
-    headers: config.headers,
-  }).then(checkResponse);
+  return fetch(
+    `https://nomoreparties.co/v1/wff-cohort-42/cards/likes/${cardId}`,
+    {
+      method: "PUT",
+      headers: config.headers,
+    }
+  ).then(checkResponse);
 };
 
 export const unlikeCard = (cardId) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-42/cards/likes/${cardId}`, {
-    method: 'DELETE',
-    headers: config.headers,
-  }).then(checkResponse);
+  return fetch(
+    `https://nomoreparties.co/v1/wff-cohort-42/cards/likes/${cardId}`,
+    {
+      method: "DELETE",
+      headers: config.headers,
+    }
+  ).then(checkResponse);
 };
+
+export function editAvatar(avatar) {
+  return fetch("https://nomoreparties.co/v1/wff-cohort-42/users/me/avatar", {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar: avatar,
+    }),
+  }).then(checkResponse);
+}
