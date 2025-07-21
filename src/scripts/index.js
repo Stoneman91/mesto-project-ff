@@ -63,11 +63,13 @@ function renderLoading(
   button,
   isLoading,
   loadingText = "Сохранение...",
-  defaultText
+  defaultText = button.dataset.originalText || button.textContent
 ) {
-  button.textContent = isLoading
-    ? loadingText
-    : defaultText || button.textContent;
+  if (!button.dataset.originalText) {
+    button.dataset.originalText = button.textContent;
+  }
+  button.textContent = isLoading ? loadingText : defaultText;
+  button.disabled = isLoading;
 }
 
 enableValidation(validationConfig);
@@ -97,11 +99,12 @@ function renderCards(cards) {
   cards.forEach((cardData) => {
     const cardElement = createCard(
       cardData,
-      (element, id) => handleDeleteClick(element, id),
+      handleDeleteClick,
       handlePopupImage,
-      (cardId, element) =>
-        handleLikeClick(cardId, element, currentUserId, likeCard, unlikeCard),
-      currentUserId
+      handleLikeClick,
+      currentUserId,
+      likeCard,
+      unlikeCard
     );
     cardsContainer.append(cardElement);
   });
@@ -144,16 +147,18 @@ profileEditForm.addEventListener("submit", (evt) => {
 
 function handleAddCardSubmit(evt) {
   evt.preventDefault();
-  renderLoading(cardSubmitButton, true);
+  renderLoading(cardSubmitButton, true, "Создание...");
 
   addNewCard(cardNameInput.value, cardLinkInput.value)
     .then((newCard) => {
       const cardElement = createCard(
         newCard,
-        (element, id) => handleDeleteClick(element, id),
+        handleDeleteClick,
         handlePopupImage,
-        (cardId, element) => handleLikeClick(cardId, element, currentUserId),
-        currentUserId
+        handleLikeClick,
+        currentUserId,
+        likeCard,
+        unlikeCard
       );
 
       cardsContainer.prepend(cardElement);

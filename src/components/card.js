@@ -4,7 +4,9 @@ export function createCard(
   onDeleteClick,
   handleImageClick,
   handleLikeClick,
-  currentUserId
+  currentUserId,
+  likeCard,
+  unlikeCard
 ) {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
@@ -31,13 +33,13 @@ export function createCard(
   }
 
   likeButton.addEventListener("click", () => {
-    handleLikeClick(cardData._id, likeButton, likeCountElement, currentUserId);
+    handleLikeClick(cardData._id, likeButton, likeCountElement, currentUserId, likeCard, unlikeCard);
   });
 
   return cardElement;
 }
 
-export function handleLikeClick(cardId, likeButton, currentUserId, likeCountElement, likeCard, unlikeCard) {
+export function handleLikeClick(cardId, likeButton, likeCountElement, currentUserId, likeCard, unlikeCard) {
 
   // Определяем текущее состояние по данным с сервера
   const isLiked = likeButton.classList.contains("card__like-button_is-active");
@@ -57,6 +59,8 @@ export function handleLikeClick(cardId, likeButton, currentUserId, likeCountElem
       console.error("Ошибка при обновлении лайка:", err);
     });
 }
+
+
 
 function updateLikesState(likes, likeButton, likeCountElement, currentUserId) {
   const likesCount = likes.length;
