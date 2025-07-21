@@ -6,11 +6,12 @@ const config = {
 };
 
 function checkResponse(res) {
-  if (!res.ok) {
-    throw new Error(`Ошибка: ${res.status}`);
-  }
-  return res.json();
-}
+if (res.ok) {
+        return res.json();
+      }
+      // если ошибка, отклоняем промис
+      return Promise.reject(`Ошибка: ${res.status}`);
+    };
 
 export function getUserInfo(name, about, avatar, _id) {
   return fetch("https://nomoreparties.co/v1/wff-cohort-42/users/me", {
