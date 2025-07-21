@@ -125,8 +125,6 @@ profileEditForm.addEventListener("submit", (evt) => {
     });
 });
 
-profileEditForm.addEventListener("submit", editProfile);
-
 function handleAddCardSubmit(evt) {
   evt.preventDefault();
 
@@ -163,9 +161,8 @@ addCardForm.addEventListener("submit", handleAddCardSubmit);
 
 let cardToDelete = null;
 
-// Обработчик открытия попапа подтверждени
 
-// Обработчик подтверждения удаления
+// подтверждение удаления
 function handleConfirmSubmit(evt) {
   evt.preventDefault();
 
