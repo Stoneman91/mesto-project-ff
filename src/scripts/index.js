@@ -15,6 +15,7 @@ import {
 
 let currentUserId = null;
 
+// DOM элементы
 const popupConfirm = document.querySelector(".popup_type_confirm");
 const confirmForm = popupConfirm.querySelector(".popup__form");
 const cardsContainer = document.querySelector(".places__list");
@@ -36,12 +37,17 @@ const profileDescription = document.querySelector(".profile__description");
 const addCardForm = document.querySelector(".popup_type_new-card .popup__form");
 const cardNameInput = addCardForm.querySelector(".popup__input_type_card-name");
 const cardLinkInput = addCardForm.querySelector(".popup__input_type_url");
-
 const popupEditAvatar = document.querySelector(".popup_type_edit-avatar");
 const editAvatarForm = popupEditAvatar.querySelector(".popup__form");
 const avatarLinkInput = editAvatarForm.querySelector(
   ".popup__input_type_avatar-url"
 );
+
+//  сабмит
+const profileSubmitButton = profileEditForm.querySelector(".popup__button");
+const cardSubmitButton = addCardForm.querySelector(".popup__button");
+const avatarSubmitButton = editAvatarForm.querySelector(".popup__button");
+const confirmSubmitButton = confirmForm.querySelector(".popup__button");
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -51,6 +57,18 @@ const validationConfig = {
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__error_visible",
 };
+
+// изменение состояния кнопки
+function renderLoading(
+  button,
+  isLoading,
+  loadingText = "Сохранение...",
+  defaultText
+) {
+  button.textContent = isLoading
+    ? loadingText
+    : defaultText || button.textContent;
+}
 
 enableValidation(validationConfig);
 
@@ -105,34 +123,28 @@ function fillProfileForm() {
 editButton.addEventListener("click", fillProfileForm);
 addButton.addEventListener("click", handleAddCard);
 
-// Новый обработчик отправки формы профиля
+// Обработчик отправки формы профиля
 profileEditForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
-
-  const submitButton = profileEditForm.querySelector(".popup__button");
-  const initialText = submitButton.textContent;
-  submitButton.textContent = "Сохранение...";
+  renderLoading(profileSubmitButton, true);
 
   editProfile(nameInput.value, jobInput.value)
     .then((userData) => {
       profileName.textContent = userData.name;
       profileDescription.textContent = userData.about;
-      closeModal(document.querySelector(".popup_type_edit"));
+      closeModal(popupEdit);
     })
     .catch((err) => {
       console.error("Ошибка при обновлении профиля:", err);
     })
     .finally(() => {
-      submitButton.textContent = initialText;
+      renderLoading(profileSubmitButton, false);
     });
 });
 
 function handleAddCardSubmit(evt) {
   evt.preventDefault();
-
-  const submitButton = addCardForm.querySelector(".popup__button");
-  const initialText = submitButton.textContent;
-  submitButton.textContent = "Сохранение...";
+  renderLoading(cardSubmitButton, true);
 
   addNewCard(cardNameInput.value, cardLinkInput.value)
     .then((newCard) => {
@@ -144,10 +156,7 @@ function handleAddCardSubmit(evt) {
         currentUserId
       );
 
-      // Добавляем новую карточку в начало списка
       cardsContainer.prepend(cardElement);
-
-      // Закрываем попап и сбрасываем форму
       closeModal(popupAddCard);
       addCardForm.reset();
     })
@@ -155,7 +164,7 @@ function handleAddCardSubmit(evt) {
       console.error("Ошибка при добавлении карточки:", err);
     })
     .finally(() => {
-      submitButton.textContent = initialText;
+      renderLoading(cardSubmitButton, false);
     });
 }
 
@@ -166,12 +175,9 @@ let cardToDelete = null;
 // подтверждение удаления
 function handleConfirmSubmit(evt) {
   evt.preventDefault();
-
   if (!cardToDelete) return;
 
-  const submitButton = confirmForm.querySelector(".popup__button");
-  const initialText = submitButton.textContent;
-  submitButton.textContent = "Удаление...";
+  renderLoading(confirmSubmitButton, true, "Удаление...", "Да");
 
   deleteCardFromServer(cardToDelete.id)
     .then(() => {
@@ -183,7 +189,7 @@ function handleConfirmSubmit(evt) {
       console.error("Ошибка при удалении:", err);
     })
     .finally(() => {
-      submitButton.textContent = initialText;
+      renderLoading(confirmSubmitButton, false, "Удаление...", "Да");
     });
 }
 
@@ -205,10 +211,7 @@ profileImage.addEventListener("click", () => {
 
 editAvatarForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
-
-  const submitButton = editAvatarForm.querySelector(".popup__button");
-  const initialText = submitButton.textContent;
-  submitButton.textContent = "Сохранение...";
+  renderLoading(avatarSubmitButton, true);
 
   editAvatar(avatarLinkInput.value)
     .then((userData) => {
@@ -219,6 +222,6 @@ editAvatarForm.addEventListener("submit", (evt) => {
       console.error("Ошибка при обновлении аватара:", err);
     })
     .finally(() => {
-      submitButton.textContent = initialText;
+      renderLoading(avatarSubmitButton, false);
     });
 });
