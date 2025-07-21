@@ -30,7 +30,7 @@ export const checkInputValidity = (formElement, inputElement, config) => {
       showInputError(
         formElement,
         inputElement,
-        inputElement.dataset.errorMessage,
+        inputElement.dataset.error || inputElement.dataset.errorMessage,
         config
       );
     } else {
