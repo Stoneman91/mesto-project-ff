@@ -10,7 +10,7 @@ import {
   deleteCardFromServer,
   likeCard,
   unlikeCard,
-  editAvatar
+  editAvatar,
 } from "../components/api.js";
 
 let currentUserId = null;
@@ -37,9 +37,11 @@ const addCardForm = document.querySelector(".popup_type_new-card .popup__form");
 const cardNameInput = addCardForm.querySelector(".popup__input_type_card-name");
 const cardLinkInput = addCardForm.querySelector(".popup__input_type_url");
 
-const popupEditAvatar = document.querySelector('.popup_type_edit-avatar');
-const editAvatarForm = popupEditAvatar.querySelector('.popup__form');
-const avatarLinkInput = editAvatarForm.querySelector('.popup__input_type_avatar-url');
+const popupEditAvatar = document.querySelector(".popup_type_edit-avatar");
+const editAvatarForm = popupEditAvatar.querySelector(".popup__form");
+const avatarLinkInput = editAvatarForm.querySelector(
+  ".popup__input_type_avatar-url"
+);
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -143,7 +145,7 @@ function handleAddCardSubmit(evt) {
       );
 
       // Добавляем новую карточку в начало списка
-      cardsContainer.append(cardElement);
+      cardsContainer.prepend(cardElement);
 
       // Закрываем попап и сбрасываем форму
       closeModal(popupAddCard);
@@ -160,7 +162,6 @@ function handleAddCardSubmit(evt) {
 addCardForm.addEventListener("submit", handleAddCardSubmit);
 
 let cardToDelete = null;
-
 
 // подтверждение удаления
 function handleConfirmSubmit(evt) {
@@ -196,18 +197,18 @@ function handleDeleteClick(cardElement, cardId) {
   openModal(popupConfirm);
 }
 
-profileImage.addEventListener('click', () => {
+profileImage.addEventListener("click", () => {
   editAvatarForm.reset();
   clearValidation(editAvatarForm, validationConfig);
   openModal(popupEditAvatar);
 });
 
-editAvatarForm.addEventListener('submit', (evt) => {
+editAvatarForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
 
-  const submitButton = editAvatarForm.querySelector('.popup__button');
+  const submitButton = editAvatarForm.querySelector(".popup__button");
   const initialText = submitButton.textContent;
-  submitButton.textContent = 'Сохранение...';
+  submitButton.textContent = "Сохранение...";
 
   editAvatar(avatarLinkInput.value)
     .then((userData) => {
@@ -215,7 +216,7 @@ editAvatarForm.addEventListener('submit', (evt) => {
       closeModal(popupEditAvatar);
     })
     .catch((err) => {
-      console.error('Ошибка при обновлении аватара:', err);
+      console.error("Ошибка при обновлении аватара:", err);
     })
     .finally(() => {
       submitButton.textContent = initialText;
