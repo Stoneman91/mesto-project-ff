@@ -31,15 +31,13 @@ export function createCard(
   }
 
   likeButton.addEventListener("click", () => {
-    handleLikeClick(cardData._id, cardElement, currentUserId);
+    handleLikeClick(cardData._id, likeButton, likeCountElement, currentUserId);
   });
 
   return cardElement;
 }
 
-export function handleLikeClick(cardId, cardElement, currentUserId, likeCard, unlikeCard) {
-  const likeButton = cardElement.querySelector(".card__like-button");
-  const likeCountElement = cardElement.querySelector(".card__like-count");
+export function handleLikeClick(cardId, likeButton, currentUserId, likeCountElement, likeCard, unlikeCard) {
 
   // Определяем текущее состояние по данным с сервера
   const isLiked = likeButton.classList.contains("card__like-button_is-active");
@@ -63,7 +61,6 @@ export function handleLikeClick(cardId, cardElement, currentUserId, likeCard, un
 function updateLikesState(likes, likeButton, likeCountElement, currentUserId) {
   const likesCount = likes.length;
   likeCountElement.textContent = likesCount;
-
   // есть ли текущий пользователь в массиве лайков
   const isLiked = likes.some((like) => like._id === currentUserId);
   likeButton.classList.toggle("card__like-button_is-active", isLiked);
